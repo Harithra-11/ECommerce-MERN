@@ -62,11 +62,16 @@ const loginUser = async (req, res) => {
             password,
             checkUser.password
         );
-        if (!checkPasswordMatch)
+        if (!checkPasswordMatch) {
             return res.json({
                 success: false,
                 message: "Incorrect password! Please try again",
             });
+        }
+      
+
+
+
 
         const token = jwt.sign({
             id: checkUser._id,
@@ -98,12 +103,41 @@ const loginUser = async (req, res) => {
     }
 
 }
+const logoutUser=(req,res)=>{
+    res.clearCookie('token').json({
+        success:true,
+        message:'Logged out successfully!'
+    })
+}
 
 
-// logout
+
 
 
 
 
 // auth middleware
-module.exports = { registerUser, loginUser };
+const authMiddleware=async(req,res,next)=>{
+    const token=req.cookies.token;
+    if(!token) return res.status(401).json({
+        success:false,
+        message:'Unauthorized user!!'
+    })
+    try{
+        const decoded=jwt.verify(token,'CLIENT_SECRET_KEY');
+        req.user=decoded;
+        next();
+    }
+    catch(error){
+        res.status(401).json({
+            success:false,
+            message:'Unauthorised user!'
+        })
+    }
+}
+
+
+
+
+// logout
+module.exports = { registerUser, loginUser,logoutUser ,authMiddleware};

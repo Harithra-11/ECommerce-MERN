@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+console.log("✅ authSlice loaded");
 
 const initialState = {
     isAuthenticated: false,
@@ -15,6 +16,21 @@ export const registerUser = createAsyncThunk('/auth/register',
         return response.data
     }
 )
+export const loginUser = createAsyncThunk('/auth/login',
+    async (formData) => {
+        const response = await axios.post(
+            "http://localhost:5000/api/auth/login",
+            formData,
+            {
+                withCredentials: true,
+            }
+        );
+
+        return response.data;
+    }
+);
+
+
 
 
 const authSlice = createSlice({
@@ -24,19 +40,34 @@ const authSlice = createSlice({
         setUser: (state, action) => {
 
         },
-        extraReducers:(builder)=>{
-            builder.addCase(registerUser.pending,(state)=>{
-                state.isLoading=true
-            }).addCase(registerUser.fulfilled,(state,action)=>{
-                state.isLoading=false;
-                state.user=null;
-                state.isAuthenticated=false
-            }).addCase(registerUser.rejected,(state,action)=>{
-                state.isLoading=false;
-                state.user=null;
-                state.isAuthenticated=false
+        extraReducers: (builder) => {
+            builder.addCase(registerUser.pending, (state) => {
+                state.isLoading = true
+            }).addCase(registerUser.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.user = null;
+                state.isAuthenticated = false
+            }).addCase(registerUser.rejected, (state, action) => {
+                state.isLoading = false;
+                state.user = null;
+                state.isAuthenticated = false
+            }).addCase(loginUser.pending, (state) => {
+                console.log("🔄 loginUser.pending")
+                state.isLoading = true
+            }).addCase(loginUser.fulfilled, (state, action) => {
+                console.log("✅ loginUser.fulfilled", action.payload);
+
+               console.log("🔥 loginUser.fulfilled",action);
+                state.isLoading = false;
+                state.user = action.payload;
+                state.isAuthenticated = true;
+            }).addCase(loginUser.rejected, (state, action) => {
+                console.log("❌ loginUser.rejected", action.error.message);
+                state.isLoading = false;
+                state.user = null;
+                state.isAuthenticated = false
             })
-        }  
+        }
     }
 
 })

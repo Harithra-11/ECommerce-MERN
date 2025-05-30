@@ -1,15 +1,22 @@
-import { Select, SelectContent, SelectTrigger, SelectItem, SelectValue } from "@radix-ui/react-select";
+
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button"; // ✅ Import Button
 
-const types = {
-    INPUT: "input",
-    SELECT: "select",
-    PASSWORD: "password",
-    TEXTAREA: "textarea",
-};
+// const types = {
+//     INPUT: "input",
+//     SELECT: "select",
+//     PASSWORD: "password",
+//     TEXTAREA: "textarea",
+// };
 
 function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText }) {
     function handleSubmit(event) {
@@ -23,7 +30,7 @@ function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText 
         const value = formData[getControlItem.name] || "";
 
         switch (getControlItem.componentType) {
-            case types.INPUT:
+            case "input":
                 element = (
                     <Input
                         name={getControlItem.name}
@@ -41,19 +48,19 @@ function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText 
                 );
                 break;
 
-            case types.SELECT:
+            case "select":
                 element = (
                     <Select
-                        value={value}
-                        onValueChange={(value) =>
-                            setFormData({
-                                ...formData,
-                                [getControlItem.name]: value,
-                            })
-                        }
+                    onValueChange={(value) =>
+                        setFormData({
+                            ...formData,
+                            [getControlItem.name]: value,
+                        })
+                    }
+                    value={value}
                     >
                         <SelectTrigger className="w-full">
-                            <SelectValue placeholder={getControlItem.placeholder} />
+                            <SelectValue placeholder={getControlItem.label} />
                         </SelectTrigger>
                         <SelectContent>
                             {getControlItem.options && getControlItem.options.length > 0
@@ -68,7 +75,7 @@ function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText 
                 );
                 break;
 
-            case types.TEXTAREA:
+            case "textarea":
                 element = (
                     <Textarea
                         name={getControlItem.name}

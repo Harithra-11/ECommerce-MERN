@@ -4,12 +4,14 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { useEffect, useRef } from "react";
 import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 
 function ProductImageUpload({ imageFile,
     setImageFile,
     uploadedImageUrl,
     setUploadedImageUrl,
-    setImageLoadingState
+    imageLoadingState,
+    setImageLoadingState,
 }) {
     const inputRef = useRef(null)
     function handleImageFileChange(event) {
@@ -65,11 +67,15 @@ function ProductImageUpload({ imageFile,
                     onChange={handleImageFileChange} />
                 {
                     !imageFile ? (
+
                         <Label htmlFor="image-upload" className="flex flex-col items-center justify-center h-32 cursor-pointer">
                             <UploadCloudIcon className="w-10 h-10 text-muted-foreground mb-2" />
                             <span>Drag & Drop (Or) click to upload image</span>
                         </Label>)
-                        : (<div className="flex items-center justify-between">
+                        : (
+                        imageLoadingState?
+                        <Skeleton className='h-10 bg-gray-100'/>:
+                        <div className="flex items-center justify-between">
                             <div className="flex items-center">
                                 <FileIcon className="w-8 text-primary mr-2 h-8" />
 

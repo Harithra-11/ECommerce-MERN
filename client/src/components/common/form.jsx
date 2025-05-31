@@ -18,7 +18,13 @@ import { Button } from "../ui/button"; // ✅ Import Button
 //     TEXTAREA: "textarea",
 // };
 
-function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText }) {
+function CommonForm({ formControls,
+    formData,
+    setFormData,
+    onSubmit,
+    buttonText,
+    isBtnDisabled
+}) {
     function handleSubmit(event) {
         event.preventDefault(); // ✅ Prevent page refresh
         if (onSubmit) {
@@ -51,13 +57,13 @@ function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText 
             case "select":
                 element = (
                     <Select
-                    onValueChange={(value) =>
-                        setFormData({
-                            ...formData,
-                            [getControlItem.name]: value,
-                        })
-                    }
-                    value={value}
+                        onValueChange={(value) =>
+                            setFormData({
+                                ...formData,
+                                [getControlItem.name]: value,
+                            })
+                        }
+                        value={value}
                     >
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder={getControlItem.label} />
@@ -65,10 +71,10 @@ function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText 
                         <SelectContent>
                             {getControlItem.options && getControlItem.options.length > 0
                                 ? getControlItem.options.map((optionItem) => (
-                                      <SelectItem key={optionItem.id} value={optionItem.id}>
-                                          {optionItem.label}
-                                      </SelectItem>
-                                  ))
+                                    <SelectItem key={optionItem.id} value={optionItem.id}>
+                                        {optionItem.label}
+                                    </SelectItem>
+                                ))
                                 : null}
                         </SelectContent>
                     </Select>
@@ -123,7 +129,7 @@ function CommonForm({ formControls, formData, setFormData, onSubmit, buttonText 
                     </div>
                 ))}
             </div>
-            <Button type="submit" className="mt-2 w-full">
+            <Button disabled={isBtnDisabled} type="submit" className="mt-2 w-full">
                 {buttonText || "Submit"}
             </Button>
         </form>

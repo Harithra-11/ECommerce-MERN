@@ -1,7 +1,12 @@
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
 
-function AdminProductTile({ product, setFormData, setopenCreateProductsDialog, setCurrentEditedId }) {
+function AdminProductTile({ product,
+    setFormData,
+    setopenCreateProductsDialog,
+    setCurrentEditedId,
+    handleDelete
+}) {
     return (
         <Card className="w-full max-w-sm mx-auto">
             <div>
@@ -19,7 +24,7 @@ function AdminProductTile({ product, setFormData, setopenCreateProductsDialog, s
                         {product?.title}
                     </h2>
                     <div className="flex justify-between items-center mb-2">
-                        <span className={`${product?.salePrice !=='' && product?.salePrice!==null ? 'line-through' : ''
+                        <span className={`${product?.salePrice !== '' && product?.salePrice !== null ? 'line-through' : ''
 
                             } text-lg font-semibold text-primary`}
                         >
@@ -38,12 +43,12 @@ function AdminProductTile({ product, setFormData, setopenCreateProductsDialog, s
                 </CardContent>
                 <CardFooter className="flex justify-between items-center ">
                     <Button onClick={() => {
-                        console.log('Editing product:', product);  
+                        console.log('Editing product:', product);
                         setopenCreateProductsDialog(true)
                         setCurrentEditedId(product?._id)
                         setFormData(product)
                     }}>Edit</Button>
-                    <Button>Delete</Button>
+                    <Button onClick={() => handleDelete(product?._id)}>Delete</Button>
                 </CardFooter>
             </div>
 

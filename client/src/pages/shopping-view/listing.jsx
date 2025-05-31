@@ -12,16 +12,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 
 
-function createSearchParamsHelper(filterParams){
-    const queryParams=[];
-    for(const [key,value] of Object.entries(filterParams)){
-        if(Array.isArray(value)&& value.length>0){
-            const paramValue=value.join(',')
+function createSearchParamsHelper(filterParams) {
+    const queryParams = [];
+    for (const [key, value] of Object.entries(filterParams)) {
+        if (Array.isArray(value) && value.length > 0) {
+            const paramValue = value.join(',')
             queryParams.push(`${key}=${encodeURIComponent(paramValue)}`)
         }
     }
-    console.log('queryParams',queryParams);
-    
+    console.log('queryParams', queryParams);
+
     return queryParams.join('&')
 
 }
@@ -35,7 +35,7 @@ function ShoppingListing() {
 
     const [filters, setFilters] = useState({});
     const [sort, setSort] = useState(null)
-    const [searchParams,setSearchParams]=useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
 
     function handleSort(value) {
 
@@ -74,22 +74,23 @@ function ShoppingListing() {
     }, [])
 
 
-    useEffect(()=>{
-        if(filters && Object.keys(filters).length>0){
-            const createQueryString=createSearchParamsHelper(filters)
+    useEffect(() => {
+        if (filters && Object.keys(filters).length > 0) {
+            const createQueryString = createSearchParamsHelper(filters)
             setSearchParams(new URLSearchParams(createQueryString))
         }
 
 
-    },[filters])
+    }, [filters])
 
     //fetch list of products
     useEffect(() => {
-        dispatch(fetchAllFilteredProducts())
-    }, [dispatch])
+        if (filters !== null && sort !== null)
+            dispatch(fetchAllFilteredProducts({ filterParams: filters, sortParams: sort }))
+    }, [dispatch, sort, filters])
 
-    
-    console.log(filters, searchParams.toString(),"filters!!");
+
+    console.log(filters, searchParams.toString(), "filters!!");
 
 
     return (

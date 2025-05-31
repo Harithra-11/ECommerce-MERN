@@ -1,11 +1,12 @@
-import { House, ShoppingCart, SquareMenu } from "lucide-react";
-import { Link } from "react-router-dom";
+import { House, LogOut, ShoppingCart, SquareMenu, User } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { shoppingViewHeaderMenuItems } from "@/config";
-import {DropdownMenu,DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel } from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import { logOutUser } from "@/store/auth-slice";
 // import { useEffect } from "react";
 
 
@@ -20,7 +21,18 @@ function MenuItems() {
 }
 
 function HeaderRightContent() {
-     const { user } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
+    const dispatch=useDispatch();
+function handleLogout(){
+    dispatch(logOutUser())
+}
+
+
+
+
+
+
     return <div className="flex lg:items-center  lg:flex-row flex-col gap-4">
         <Button variant="outline" size="icon">
             <ShoppingCart className="w-6 h-6" />
@@ -30,18 +42,42 @@ function HeaderRightContent() {
             <DropdownMenuTrigger asChild>
                 <Avatar className="bg-black">
                     <AvatarFallback className="bg-black text-white font-extrabold" >
-                       {user?.userName?.[0]?.toUpperCase()}
+                        {user?.userName?.[0]?.toUpperCase()}
 
-                        </AvatarFallback>
+                    </AvatarFallback>
 
                 </Avatar>
 
             </DropdownMenuTrigger>
             <DropdownMenuContent side="right" className="w-56">
                 <DropdownMenuLabel>
-                    Logged in as
+                    Logged in as {user?.userName}
 
                 </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+
+                {/* <DropdownMenuItem onClick={()=>navigate('/shop/account')}>
+                    <User className="mr-2 h-4 w-4" />
+                    Account
+                </DropdownMenuItem> */}
+                <DropdownMenuItem
+                    onSelect={(e) => {
+                        e.preventDefault(); // Optional but safe
+                        navigate("/shop/account");
+                    }}
+                >
+                    <User className="mr-2 h-4 w-4" />
+                    Account
+                </DropdownMenuItem>
+
+
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    onSelect= {handleLogout}
+                >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                </DropdownMenuItem>
 
 
             </DropdownMenuContent>
@@ -54,8 +90,8 @@ function HeaderRightContent() {
 
 function ShoppingHeader() {
     const { isAuthenticated } = useSelector((state) => state.auth);
-   
-  
+
+
 
 
 
@@ -78,17 +114,18 @@ function ShoppingHeader() {
                 </SheetTrigger>
                 <SheetContent side="left" className="w-full max-w-xs">
                     <MenuItems />
+                    <HeaderRightContent/>
                 </SheetContent>
             </Sheet>
             <div className="hidden lg:block">
                 <MenuItems />
 
             </div>
-            {
-                isAuthenticated ? <div>
+            
+                 <div className="hidden lg:block">
                     <HeaderRightContent />
-                </div> : null
-            }
+                </div> 
+            
 
         </div>
 

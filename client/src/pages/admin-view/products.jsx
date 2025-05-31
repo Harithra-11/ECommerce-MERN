@@ -105,7 +105,7 @@ function AdminProducts() {
 
 
 
-    console.log(formData, "productList");
+    // console.log(formData, "productList");
     return (
         <Fragment>
             <div className="mb-5 w-full flex justify-end">
@@ -115,7 +115,7 @@ function AdminProducts() {
                 {
                     productList && productList.length > 0 ?
                         productList.map(productItem =>
-                            <AdminProductTile setFormData={setFormData}
+                            <AdminProductTile key={productItem._id} setFormData={setFormData}
                                 setopenCreateProductsDialog={setopenCreateProductsDialog}
                                 setCurrentEditedId={setCurrentEditedId}
                                 product={productItem} 

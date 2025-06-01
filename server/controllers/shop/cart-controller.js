@@ -149,7 +149,7 @@ const updateCartItemQty = async (req, res) => {
 
         })
 
-        const populateCartItems = cart.map(item => ({
+        const populateCartItems = cart.items.map(item => ({
             productId: item.productId ? item.productId._id : null,
             image: item.productId ? item.productId.image : null,
             title: item.productId ? item.productId.title : "Product not found",
@@ -204,15 +204,19 @@ const deleteCartItem = async (req, res) => {
             })
 
         }
-        cart.items=cart.items.filter(item=>item.productId._id.toString()!==productId)
+        cart.items=cart.items.filter((item)=>item.productId._id.toString()!==productId)
+        //  cart.items = cart.items.filter((item) => {
+        //     const id = item.productId?._id || item.productId;
+        //     return id.toString() !== productId;
+        // });
         await cart.save();
 
-        await Cart.populate({
+        await cart.populate({
             path: 'items.productId',
             select: "image title price salePrice"
 
         })
-         const populateCartItems = cart.map(item => ({
+         const populateCartItems = cart.items.map((item) => ({
             productId: item.productId ? item.productId._id : null,
             image: item.productId ? item.productId.image : null,
             title: item.productId ? item.productId.title : "Product not found",
@@ -222,6 +226,7 @@ const deleteCartItem = async (req, res) => {
 
 
         }));
+      
         res.status(200).json({
             success: true,
             data: {

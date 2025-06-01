@@ -7,6 +7,9 @@ import { shoppingViewHeaderMenuItems } from "@/config";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logOutUser } from "@/store/auth-slice";
+import UserCartWrapper from "./cart-wrapper";
+import { useEffect, useState } from "react";
+import { fetchCartItems } from "@/store/shop/cart-slice";
 // import { useEffect } from "react";
 
 
@@ -22,22 +25,40 @@ function MenuItems() {
 
 function HeaderRightContent() {
     const { user } = useSelector((state) => state.auth);
+    const { cartItems } = useSelector(state => state.shopCart)
+    const [openCartSheet, setOpenCartSheet] = useState(false)
     const navigate = useNavigate();
-    const dispatch=useDispatch();
-function handleLogout(){
-    dispatch(logOutUser())
-}
+    const dispatch = useDispatch();
+    function handleLogout() {
+        dispatch(logOutUser())
+    }
+    useEffect(() => {
+        dispatch(fetchCartItems(user?.id))
+    }, [dispatch])
 
+    console.log(cartItems);
 
 
 
 
 
     return <div className="flex lg:items-center  lg:flex-row flex-col gap-4">
-        <Button variant="outline" size="icon">
-            <ShoppingCart className="w-6 h-6" />
-            <span className="sr-only">User cart</span>
-        </Button>
+        <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+            <Button onClick={() => setOpenCartSheet(true)} variant="outline" size="icon">
+                <ShoppingCart className="w-6 h-6" />
+                <span className="sr-only">User cart</span>
+            </Button>
+            <UserCartWrapper cartItems={cartItems && cartItems.items && cartItems.items.length > 0 ? cartItems.items : []} />
+
+
+        </Sheet>
+
+
+
+
+
+
+
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Avatar className="bg-black">
@@ -73,7 +94,7 @@ function handleLogout(){
 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                    onSelect= {handleLogout}
+                    onSelect={handleLogout}
                 >
                     <LogOut className="mr-2 h-4 w-4" />
                     Logout
@@ -114,18 +135,18 @@ function ShoppingHeader() {
                 </SheetTrigger>
                 <SheetContent side="left" className="w-full max-w-xs">
                     <MenuItems />
-                    <HeaderRightContent/>
+                    <HeaderRightContent />
                 </SheetContent>
             </Sheet>
             <div className="hidden lg:block">
                 <MenuItems />
 
             </div>
-            
-                 <div className="hidden lg:block">
-                    <HeaderRightContent />
-                </div> 
-            
+
+            <div className="hidden lg:block">
+                <HeaderRightContent />
+            </div>
+
 
         </div>
 

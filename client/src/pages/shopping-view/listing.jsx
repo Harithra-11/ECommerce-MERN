@@ -1,15 +1,16 @@
 import ProductFilter from "@/components/shopping-view/filter";
+import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { Button } from "@/components/ui/button";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
-import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
+import { fetchAllFilteredProducts, fetchProductDetails } from "@/store/shop/products-slice";
 
 import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createSearchParams, useSearchParams } from "react-router-dom";
+import {  useSearchParams } from "react-router-dom";
 
 
 function createSearchParamsHelper(filterParams) {
@@ -20,7 +21,7 @@ function createSearchParamsHelper(filterParams) {
             queryParams.push(`${key}=${encodeURIComponent(paramValue)}`)
         }
     }
-    console.log('queryParams', queryParams);
+    // console.log('queryParams', queryParams);
 
     return queryParams.join('&')
 
@@ -29,13 +30,16 @@ function createSearchParamsHelper(filterParams) {
 function ShoppingListing() {
 
     const dispatch = useDispatch();
-    const { productList } = useSelector(state => state.shopProducts)
+    const { productList,productDetails } = useSelector(state => state.shopProducts)
 
 
 
     const [filters, setFilters] = useState({});
     const [sort, setSort] = useState(null)
     const [searchParams, setSearchParams] = useSearchParams()
+
+
+    const[openDetailsDialog,setOpenDetailsDialog]=useState(false)
 
     function handleSort(value) {
 
@@ -44,7 +48,7 @@ function ShoppingListing() {
     }
 
     function handleFilter(getSectionId, getCurrentOption) {
-        console.log(getSectionId, getCurrentOption);
+        // console.log(getSectionId, getCurrentOption);
         let cpyFilters = { ...filters };
         const indexOfCurrentSection = Object.keys(cpyFilters).indexOf(getSectionId);
         if (indexOfCurrentSection === -1) {
@@ -66,6 +70,12 @@ function ShoppingListing() {
         sessionStorage.setItem('filters', JSON.stringify(cpyFilters))
 
 
+    }
+
+    function handleGetProductDetails(getCurrentProductId){
+        console.log(getCurrentProductId);
+        dispatch(fetchProductDetails(getCurrentProductId))
+        
     }
 
     useEffect(() => {
@@ -90,7 +100,12 @@ function ShoppingListing() {
     }, [dispatch, sort, filters])
 
 
-    console.log(filters, searchParams.toString(), "filters!!");
+    useEffect(()=>{
+        if(productDetails!==null) setOpenDetailsDialog(true)
+
+
+    },[productDetails])
+    console.log(productDetails,"productDetails");
 
 
     return (
@@ -134,14 +149,13 @@ function ShoppingListing() {
                     {
                         productList && productList.length > 0 ?
                             productList.map(productItem =>
-                                <ShoppingProductTile key={productItem.id} product={productItem} />
+                                <ShoppingProductTile handleGetProductDetails={handleGetProductDetails} key={productItem.id} product={productItem} />
                             )
                             : null
                     }
                 </div>
             </div>
-
-
+            <ProductDetailsDialog open={openDetailsDialog} setOpen={setOpenDetailsDialog} productDetails={productDetails}/>
         </div>
     );
 }

@@ -1,21 +1,17 @@
-
-import { useState } from "react";
-import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import { Button } from "../ui/button";
 import { Dialog } from "../ui/dialog";
-import { Table,TableBody,TableCell,TableHead,TableHeader, TableRow } from "../ui/table";
-import ShoppingOrderDetailsView from "./order-details";
+import { useState } from "react";
+import AdminOrderDetailsView from "./order-details";
 
-function ShoppingOrders(){
-
-
-
-    const [openDetailsDialog,setOpenDetailsDialog]=useState(false)
-    return(
+function AdminOrdersView() {
+    const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
+    return (
         <Card>
             <CardHeader>
                 <CardTitle>
-                    Order History
+                    All orders
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -50,12 +46,19 @@ function ShoppingOrders(){
                             <TableCell>123456</TableCell>
                             <TableCell>
                                 <Dialog open={openDetailsDialog} onOpenChange={setOpenDetailsDialog}>
-                                    <Button onClick={()=>setOpenDetailsDialog(true)}>
-                                    view details
-                                </Button>
-                                <ShoppingOrderDetailsView/>
+                                    {/* <DialogTrigger asChild> */}
+                                        <Button onClick={() => setOpenDetailsDialog(true)}>
+                                            view details
+                                        </Button>
+
+                                    {/* </DialogTrigger> */}
+
+
+                                    <AdminOrderDetailsView />
+
+
                                 </Dialog>
-                                
+
                             </TableCell>
                         </TableRow>
                     </TableBody>
@@ -64,4 +67,4 @@ function ShoppingOrders(){
         </Card>
     )
 }
-export default ShoppingOrders;
+export default AdminOrdersView;

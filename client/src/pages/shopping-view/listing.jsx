@@ -36,7 +36,7 @@ function ShoppingListing() {
 
 
     const { user } = useSelector((state) => state.auth);
-    
+
 
     const [filters, setFilters] = useState({});
     const [sort, setSort] = useState(null)
@@ -44,7 +44,7 @@ function ShoppingListing() {
 
 
     const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
-    const {toast}=useToast()
+    const { toast } = useToast()
 
     function handleSort(value) {
 
@@ -92,7 +92,7 @@ function ShoppingListing() {
             if (data?.payload?.success) {
                 dispatch(fetchCartItems(user?.id))
                 toast({
-                    title:'Product added to cart'
+                    title: 'Product added to cart'
                 })
 
             }
@@ -131,8 +131,8 @@ function ShoppingListing() {
 
 
     }, [productDetails])
-   
-    
+
+
 
 
 
@@ -185,7 +185,11 @@ function ShoppingListing() {
                     }
                 </div>
             </div>
-            <ProductDetailsDialog open={openDetailsDialog} setOpen={setOpenDetailsDialog} productDetails={productDetails} />
+            <ProductDetailsDialog
+
+                open={openDetailsDialog}
+                setOpen={setOpenDetailsDialog}
+                productDetails={productDetails} />
         </div>
     );
 }

@@ -36,6 +36,8 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
 
 
     }
+
+    
 function handleDialogClose(){
     setOpen(false)
     dispatch(setProductDetails())

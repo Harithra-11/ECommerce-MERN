@@ -19,7 +19,7 @@ const initialAddressFormData = {
 
 
 
-function Address() {
+function Address({setCurrentSelectedAddress}) {
 
     const [formData, setFormData] = useState(initialAddressFormData)
     const [currentEditedId, setCurrentEditedId] = useState(null)
@@ -29,52 +29,9 @@ function Address() {
     const { toast } = useToast()
 
 
-    // function handleManageAddress(event) {
-    //     event.preventDefault();
-    //     if(addressList.length>=3){
-    //         toast({
-    //             title:'You can add max 3 addressess only!!',
-    //             variant:'destructive'
-    //         })
-    //         return;
-    //     }
+ 
 
-
-
-    //     currentEditedId !== null ? dispatch(editaAddress({
-    //         userId: user?.id,
-    //         addressId: currentEditedId,
-    //         formData
-    //     })).then((data) => {
-    //         if (data?.payload?.success) {
-    //             dispatch(fetchAllAddresses(user?.id))
-    //             setCurrentEditedId(null)
-    //             setFormData(initialAddressFormData)
-    //             toast({
-    //                 title: "Address updated successfully!!"
-    //             })
-
-    //         }
-    //     }) :
-
-
-
-    //         dispatch(addNewAddress({
-    //             ...formData,
-    //             userId: user?.id
-    //         })).then(data => {
-    //             console.log(data)
-    //             if (data?.payload?.success) {
-    //                 dispatch(fetchAllAddresses(user?.id))
-    //                 setFormData(initialAddressFormData)
-    //                 toast({
-    //                     title: "Address added successfully!!"
-    //                 })
-
-    //             }
-    //         })
-
-    // }
+    
 
     function handleManageAddress(event) {
     event.preventDefault();
@@ -164,7 +121,7 @@ function Address() {
     useEffect(() => {
         dispatch(fetchAllAddresses(user?.id))
     }, [dispatch])
-    console.log(addressList, "addressList")
+    // console.log(addressList, "addressList")
 
 
 
@@ -179,6 +136,7 @@ function Address() {
                                 handleDeleteAddress={handleDeleteAddress}
                                 addressInfo={singleAddressItem}
                                 handleEditAddress={handleEditAddress}
+                                setCurrentSelectedAddress={setCurrentSelectedAddress}
 
                             />
                         ) : null

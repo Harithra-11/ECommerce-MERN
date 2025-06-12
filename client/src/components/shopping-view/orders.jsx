@@ -6,7 +6,9 @@ import { Dialog } from "../ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import ShoppingOrderDetailsView from "./order-details";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllOrdersByUserId, getOrderDetails, resetOrderDetails } from "@/store/shop/order-slice";
+import { getAllOrdersByUserId, getOrderDetails, resetShopOrderDetails } from "@/store/shop/order-slice";
+// import { getAllOrdersByUserId, getOrderDetails,  resetShopOrderDetails } from "@/store/shop/order-slice";
+
 import { Badge } from "../ui/badge";
 
 
@@ -97,7 +99,8 @@ function ShoppingOrders() {
                                         <TableCell>
                                             <Dialog open={openDetailsDialog} onOpenChange={()=>{
                                                 setOpenDetailsDialog(false)
-                                                dispatch(resetOrderDetails())
+                                                dispatch(resetShopOrderDetails());
+
                                             }}>
                                                 <Button onClick={() => handleFetchOrderDetails(orderItem?._id)}>
                                                     view details

@@ -102,7 +102,7 @@ function ShoppingOrders() {
                                                 <Button onClick={() => handleFetchOrderDetails(orderItem?._id)}>
                                                     view details
                                                 </Button>
-                                                <ShoppingOrderDetailsView />
+                                                <ShoppingOrderDetailsView orderDetails={orderDetails} />
                                             </Dialog>
 
                                         </TableCell>

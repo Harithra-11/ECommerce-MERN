@@ -1,33 +1,52 @@
+import { useSelector } from "react-redux";
+import { Badge } from "../ui/badge";
 import { DialogContent } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 
 
 
-function ShoppingOrderDetailsView(){
+function ShoppingOrderDetailsView({ orderDetails }) {
+
+    const {user}=useSelector(state=>state.auth)
     return (
-         <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[600px]">
             <div className="grid gap-6">
 
                 <div className="grid gap-2">
                     <div className="flex mt-2 items-center justify-between ">
                         <p className="font-medium"> Order ID </p>
-                        <Label> 123456</Label>
+                        <Label> {orderDetails?._id}</Label>
 
                     </div>
                     <div className="flex mt-2 items-center justify-between ">
                         <p className="font-medium"> Order date </p>
-                        <Label> 27/09/2027</Label>
+                        <Label> {orderDetails?.orderDate.split('T')[0]}</Label>
 
                     </div>
                     <div className="flex mt-2 items-center justify-between ">
                         <p className="font-medium"> Order price </p>
-                        <Label> $500</Label>
+                        <Label> ${orderDetails?.totalAmount}</Label>
+
+                    </div>
+                    <div className="flex mt-2 items-center justify-between ">
+                        <p className="font-medium"> Payment Method</p>
+                        <Label> {orderDetails?.paymentMethod}</Label>
+
+                    </div>
+                    <div className="flex mt-2 items-center justify-between ">
+                        <p className="font-medium"> Payment status </p>
+                        <Label> {orderDetails?.paymentStatus}</Label>
 
                     </div>
                     <div className="flex mt-2 items-center justify-between ">
                         <p className="font-medium"> Order status </p>
-                        <Label> In process</Label>
+                        <Label>
+                            <Badge className={`py-1 px-3 ${orderDetails?.orderStatus === 'Confirmed' ? 'bg-green-500' : 'bg-black'}`}>
+                                {orderDetails?.orderStatus}
+                            </Badge>
+
+                        </Label>
 
                     </div>
 
@@ -41,14 +60,27 @@ function ShoppingOrderDetailsView(){
                             Order Details
                         </div>
                         <ul className="grid gap-3">
-                            <li className="flex items-center justify-between">
-                                <span>
-                                    Product 1
-                                </span>
-                                <span>
-                                    100
-                                </span>
-                            </li>
+                            {
+                                orderDetails?.cartItems && orderDetails?.cartItems.length > 0 ?
+                                    orderDetails?.cartItems.map(item =>
+                                        <li className="flex items-center justify-between">
+                                            <span>
+                                                Title:{item.title}
+                                            </span>
+                                            <span>
+                                                Quantity:{item.quantity}
+                                            </span>
+                                            <span>
+                                               Price: ${item.price}
+                                            </span>
+                                        </li>
+
+                                    ) : null
+                            }
+
+
+
+
 
                         </ul>
                     </div>
@@ -61,22 +93,22 @@ function ShoppingOrderDetailsView(){
 
                         <div className="grid gap-0.5 text-muted-foreground">
                             <span>
-                                John Doe
+                               {user.userName}
                             </span>
                             <span>
-                                Address
+                                {orderDetails?.addressInfo?.address}
                             </span>
                             <span>
-                                City
+                                {orderDetails?.addressInfo?.city}
                             </span>
                             <span>
-                                Pincode
+                                {orderDetails?.addressInfo?.pincode}
                             </span>
                             <span>
-                                Phone
+                                {orderDetails?.addressInfo?.phone}
                             </span>
                             <span>
-                                Notes
+                                {orderDetails?.addressInfo?.notes}
                             </span>
 
                         </div>
@@ -85,7 +117,7 @@ function ShoppingOrderDetailsView(){
 
                 </div>
 
-        
+
 
             </div>
 

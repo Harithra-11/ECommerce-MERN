@@ -4,7 +4,9 @@ import { DialogContent } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllOrdersForAdmin, getOrderDetailsForAdmin, updateOrderStatus } from "@/store/admin/order-slice";
+import { useToast } from "@/hooks/use-toast";
 
 
 const initialFormData={
@@ -19,10 +21,26 @@ function AdminOrderDetailsView({orderDetails}) {
 
     const [formData,setFormData]=useState(initialFormData)
     const {user}=useSelector((state)=>state.auth)
+    const dispatch=useDispatch()
+    const {toast}=useToast()
 
 
     function handleUpdateStatus(event){
-        event.preventDefault()
+        event.preventDefault();
+
+        const {status}=formData;
+        dispatch(updateOrderStatus({id:orderDetails?._id,orderStatus:status})).then(data=>{
+            if(data?.payload?.success){
+                dispatch(getOrderDetailsForAdmin(orderDetails?._id))
+                dispatch(getAllOrdersForAdmin())
+                setFormData(initialFormData)
+                toast({
+                    title:data?.payload?.message,
+                })
+            }
+            
+        })
+        
     }
     return (
         <DialogContent className="sm:max-w-[600px]">
@@ -57,7 +75,12 @@ function AdminOrderDetailsView({orderDetails}) {
                     <div className="flex mt-2 items-center justify-between ">
                         <p className="font-medium"> Order status </p>
                         <Label>
-                            <Badge className={`py-1 px-3 ${orderDetails?.orderStatus === 'Confirmed' ? 'bg-green-500' : 'bg-black'}`}>
+                            <Badge className={`py-1 px-3 
+                                ${orderDetails?.orderStatus === 'Confirmed' 
+                                ? 'bg-green-500' :
+                                orderDetails?.orderStatus === 'rejected' ? 'bg-red-600'
+                                : 'bg-black'
+                                }`}>
                                 {orderDetails?.orderStatus}
                             </Badge>
 

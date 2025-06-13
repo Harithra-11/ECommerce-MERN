@@ -77,7 +77,10 @@ function AdminOrdersView() {
                                             {orderItem?.orderDate.split('T')[0]}
                                         </TableCell>
                                         <TableCell>
-                                            <Badge className={`py-1 px-3 ${orderItem?.orderStatus === 'Confirmed' ? 'bg-green-500' : 'bg-black'}`}>
+                                            <Badge className={`py-1 px-3 ${orderItem?.orderStatus === 'Confirmed'
+                                                ? 'bg-green-500' :
+                                                orderItem?.orderStatus === 'rejected' ? 'bg-red-600'
+                                                    : 'bg-black'}`}>
                                                 {orderItem?.orderStatus}
                                             </Badge>
 
@@ -85,11 +88,11 @@ function AdminOrdersView() {
                                         <TableCell>${orderItem?.totalAmount}</TableCell>
                                         <TableCell>
                                             <Dialog open={openDetailsDialog}
-                                            onOpenChange={() => {
-                                                setOpenDetailsDialog(false)
-                                                dispatch(resetAdminOrderDetails());
+                                                onOpenChange={() => {
+                                                    setOpenDetailsDialog(false)
+                                                    dispatch(resetAdminOrderDetails());
 
-                                            }}
+                                                }}
                                             >
                                                 <Button
                                                     onClick={() => handleFetchOrderDetails(orderItem?._id)}

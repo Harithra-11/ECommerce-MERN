@@ -16,11 +16,20 @@ function ShoppingProductTile({ product, handleGetProductDetails, handleAddToCart
                             className="w-full h-[300px] object-cover rounded-t-lg"
                         />
                         {
-                            product?.salePrice > 0 ?
+                            product?.totalStock === 0 ?
                                 <Badge className="absolute top-2 l-2 bg-red-500 hover:bg-red-600">
-                                    Sale
-                                </Badge>
-                                : null
+                                    Out Of Stock
+                                </Badge> :
+                                product?.totalStock < 10 ?
+                                    <Badge className="absolute top-2 l-2 bg-red-500 hover:bg-red-600">
+                                        {`only ${product?.totalStock} items left`}
+                                    </Badge> :
+
+                                    product?.salePrice > 0 ?
+                                        <Badge className="absolute top-2 l-2 bg-red-500 hover:bg-red-600">
+                                            Sale
+                                        </Badge>
+                                        : null
                         }
 
                     </div>
@@ -44,10 +53,23 @@ function ShoppingProductTile({ product, handleGetProductDetails, handleAddToCart
                 </div>
 
             </div>
-            <CardFooter>
-                <Button onClick={() => handleAddToCart(product?._id)} className="w-full">
-                    Add to cart
-                </Button>
+            <CardFooter>{
+                product?.totalStock === 0 ?
+                    <Button className="w-full opacity-60 cursor-not-allowed">
+                        Out of stock
+                    </Button> :
+                    <Button
+                        onClick={() => {
+                            
+                            handleAddToCart(product?._id,product?.totalStock);
+                        }}
+                        className="w-full"
+                    >
+                        Add to cart
+                    </Button>
+
+            }
+
             </CardFooter>
 
         </Card>

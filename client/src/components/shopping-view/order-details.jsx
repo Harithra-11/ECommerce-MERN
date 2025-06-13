@@ -8,7 +8,7 @@ import { Separator } from "../ui/separator";
 
 function ShoppingOrderDetailsView({ orderDetails }) {
 
-    const {user}=useSelector(state=>state.auth)
+    const { user } = useSelector(state => state.auth)
     return (
         <DialogContent className="sm:max-w-[600px]">
             <div className="grid gap-6">
@@ -42,7 +42,10 @@ function ShoppingOrderDetailsView({ orderDetails }) {
                     <div className="flex mt-2 items-center justify-between ">
                         <p className="font-medium"> Order status </p>
                         <Label>
-                            <Badge className={`py-1 px-3 ${orderDetails?.orderStatus === 'Confirmed' ? 'bg-green-500' : 'bg-black'}`}>
+                            <Badge className={`py-1 px-3 ${orderDetails?.orderStatus === 'Confirmed'
+                                ? 'bg-green-500' :
+                                orderDetails?.orderStatus === 'rejected' ? 'bg-red-600'
+                                    : 'bg-black'}`}>
                                 {orderDetails?.orderStatus}
                             </Badge>
 
@@ -71,7 +74,7 @@ function ShoppingOrderDetailsView({ orderDetails }) {
                                                 Quantity:{item.quantity}
                                             </span>
                                             <span>
-                                               Price: ${item.price}
+                                                Price: ${item.price}
                                             </span>
                                         </li>
 
@@ -93,7 +96,7 @@ function ShoppingOrderDetailsView({ orderDetails }) {
 
                         <div className="grid gap-0.5 text-muted-foreground">
                             <span>
-                               {user.userName}
+                                {user.userName}
                             </span>
                             <span>
                                 {orderDetails?.addressInfo?.address}

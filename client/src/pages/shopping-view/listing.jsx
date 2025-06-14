@@ -89,16 +89,17 @@ function ShoppingListing() {
 
 
 
-    function handleAddToCart(getCurrentProductId, getTotalStock) {
-        console.log(cartItems, "cart Items");
+    async function handleAddToCart(getCurrentProductId, getTotalStock) {
+       
         let getCartItems = cartItems?.items || [];
         if (getCartItems.length) {
             const indexOfCurrentItem = getCartItems.findIndex(item => item.productId === getCurrentProductId)
+           let getQuantity=0;
             if (indexOfCurrentItem > -1) {
-                const getQuantity = getCartItems[indexOfCurrentItem].quantity;
+                 getQuantity = getCartItems[indexOfCurrentItem].quantity;
                 if (getQuantity + 1 > getTotalStock) {
                     toast({
-                        title: `Only ${getQuantity} quantity can be added for this item`,
+                        title: `Only ${getTotalStock-getQuantity} quantity can be added for this item`,
                         variant: 'destructive'
                     })
                     return
@@ -122,6 +123,45 @@ function ShoppingListing() {
 
 
     }
+//     async function handleAddToCart(getCurrentProductId, getTotalStock) {
+//     const getCartItems = cartItems?.items || [];
+//     let getQuantity = 0;
+
+//     const indexOfCurrentItem = getCartItems.findIndex(
+//         (item) => item.productId === getCurrentProductId
+//     );
+
+//     if (indexOfCurrentItem > -1) {
+//         getQuantity = getCartItems[indexOfCurrentItem].quantity;
+//     }
+
+//     // ✅ Always check stock limit regardless of whether it's already in cart
+//     if (getQuantity + 1 > getTotalStock) {
+//         toast({
+//             title: `Only ${getTotalStock - getQuantity} more item(s) can be added for this product`,
+//             variant: "destructive",
+//         });
+//         return;
+//     }
+
+//     // ✅ Proceed to add to cart
+//     dispatch(
+//         addToCart({
+//             userId: user?.id,
+//             productId: getCurrentProductId,
+//             quantity: 1,
+//         })
+//     ).then((data) => {
+//         if (data?.payload?.success) {
+//             dispatch(fetchCartItems(user?.id)).then((cart) => {
+//                 console.log("🧾 Cart after fetch:", cart?.payload);
+//             });
+
+//             toast({ title: "Product added to cart" });
+//         }
+//     });
+// }
+
 
     useEffect(() => {
         setSort("price-lowtohigh");

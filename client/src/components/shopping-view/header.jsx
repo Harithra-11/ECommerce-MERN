@@ -16,22 +16,24 @@ import { Label } from "../ui/label";
 
 function MenuItems() {
     const navigate = useNavigate()
-    const location=useLocation()
-    const [searchParams,setSearchParams]=useSearchParams()
+    const location = useLocation()
+    const [searchParams, setSearchParams] = useSearchParams()
 
     function handleNavigate(getCurrentMenuItem) {
         sessionStorage.removeItem('filters')
-        const currentFilter = getCurrentMenuItem.id !== 'home' && getCurrentMenuItem.id!=='products' ? {
-            category: [
-                getCurrentMenuItem.id
-            ]
-        } : null
+        const currentFilter = getCurrentMenuItem.id !== 'home' && getCurrentMenuItem.id !== 'products'
+            && getCurrentMenuItem.id !== 'search'
+            ? {
+                category: [
+                    getCurrentMenuItem.id
+                ]
+            } : null
 
         sessionStorage.setItem('filters', JSON.stringify(currentFilter))
 
-        location.pathname.includes('listing') && currentFilter!==null ?
-        setSearchParams(new URLSearchParams(`?category=${getCurrentMenuItem.id}`)):
-        navigate(getCurrentMenuItem.path)
+        location.pathname.includes('listing') && currentFilter !== null ?
+            setSearchParams(new URLSearchParams(`?category=${getCurrentMenuItem.id}`)) :
+            navigate(getCurrentMenuItem.path)
 
 
     }
@@ -76,9 +78,9 @@ function HeaderRightContent() {
                 <ShoppingCart className="w-6 h-6" />
                 <span className="sr-only">User cart</span>
             </Button>
-            <UserCartWrapper 
-            setOpenCartSheet={setOpenCartSheet}
-            cartItems={cartItems && cartItems.items && cartItems.items.length > 0 ? cartItems.items : []} />
+            <UserCartWrapper
+                setOpenCartSheet={setOpenCartSheet}
+                cartItems={cartItems && cartItems.items && cartItems.items.length > 0 ? cartItems.items : []} />
 
 
         </Sheet>

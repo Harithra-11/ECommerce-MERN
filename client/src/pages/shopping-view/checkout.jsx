@@ -19,9 +19,9 @@ function ShoppingCheckout() {
 
     const { cartItems } = useSelector(state => state.shopCart)
     const { user } = useSelector(state => state.auth)
-    const {approvalURL}=useSelector(state=>state.shopOrder)
+    const { approvalURL } = useSelector(state => state.shopOrder)
     const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null)
-    const [isPaymentStart,setIsPaymentStart]=useState(false)
+    const [isPaymentStart, setIsPaymentStart] = useState(false)
     const { toast } = useToast()
     const dispatch = useDispatch()
 
@@ -39,7 +39,7 @@ function ShoppingCheckout() {
 
 
     function handleInitiatePaypalPayment() {
-         if (cartItems.length===0) {
+        if (cartItems.length === 0) {
             toast({
                 title: 'Your cart is empty',
                 description: 'Please add items to proceed',
@@ -57,7 +57,7 @@ function ShoppingCheckout() {
         }
         const orderData = {
             userId: user?.id,
-            cartId:cartItems?._id,
+            cartId: cartItems?._id,
             cartItems: cartItems.items.map(singleCartItem => ({
                 productId: singleCartItem?.productId,
                 title: singleCartItem?.title,
@@ -86,11 +86,11 @@ function ShoppingCheckout() {
         }
         // console.log("order data", orderData);
         dispatch(createNewOrder(orderData)).then((data) => {
-            console.log(data,'blessy');
-            if(data?.payload?.success){
+            console.log(data, 'blessy');
+            if (data?.payload?.success) {
                 setIsPaymentStart(true)
 
-            }else{
+            } else {
                 setIsPaymentStart(false)
             }
 
@@ -101,8 +101,8 @@ function ShoppingCheckout() {
 
 
     }
-    if(approvalURL){
-        window.location.href=approvalURL
+    if (approvalURL) {
+        window.location.href = approvalURL
     }
 
 
@@ -121,7 +121,10 @@ function ShoppingCheckout() {
 
             <div className='grid grid-col-1 sm:grid-cols-2 gap-5 mt-5 p-5
             '>
-                <Address setCurrentSelectedAddress={setCurrentSelectedAddress} />
+                <Address selectedId={currentSelectedAddress}
+
+
+                    setCurrentSelectedAddress={setCurrentSelectedAddress} />
                 <div className='flex flex-col gap-4'>
                     {
                         cartItems && cartItems.items && cartItems.items.length > 0 ?
@@ -143,7 +146,12 @@ function ShoppingCheckout() {
                             className="mt-4 w-full"
 
                         >
-                            Checkout with PayPal
+                            {
+                                isPaymentStart ? 'Processing paypal payment...'
+                                    :
+                                    'Checkout with PayPal'
+
+                            }
                         </Button>
 
                     </div>

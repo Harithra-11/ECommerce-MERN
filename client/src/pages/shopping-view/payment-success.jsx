@@ -1,7 +1,10 @@
+import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 
 function PaymentSuccessPage(){
+    const navigate=useNavigate();
     return (
         <div className="flex items-center justify-center min-h-screen bg-green-50 p-4">
             <div className="bg-white p-8 rounded-2xl shadow-md text-center max-w-md">
@@ -12,6 +15,12 @@ function PaymentSuccessPage(){
                 <p className="text-gray-600 mb-6">
                     Thank you for your purchase. Your order has been placed successfully.
                 </p>
+                <Button className='mt-5' onClick={
+                    ()=>navigate("/shop/account")
+                }>
+                    View Orders
+
+                </Button>
 
             </div>
         </div>

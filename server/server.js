@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express=require('express')
 const mongoose=require('mongoose')
 const cookieParser=require('cookie-parser')
@@ -17,7 +18,7 @@ const commonFeatureRouter=require('./routes/common/feature-routes')
 
 
 
-const MONGOURI='mongodb+srv://harithrar11:harithrapraisy@cluster0.xbbmcvb.mongodb.net/'
+const MONGOURI=process.env.MONGOURI
 //create a database connection -> u can also create a seperate file for this and then import/use that file here
 mongoose
 .connect(MONGOURI)
@@ -26,7 +27,6 @@ mongoose
 
 // const __dirname=path.resolve();
 
-require('dotenv').config();
 const app=express()
 const PORT=process.env.PORT||5000;
 app.use(cors({

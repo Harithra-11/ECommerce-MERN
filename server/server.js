@@ -2,6 +2,8 @@ const express=require('express')
 const mongoose=require('mongoose')
 const cookieParser=require('cookie-parser')
 const cors=require('cors')
+const path = require('path');
+
 const authRouter=require('./routes/auth/auth-routes')
 const adminProductsRouter=require('./routes/admin/products-routes')
 const adminOrderRouter=require('./routes/admin/order-routes')
@@ -15,12 +17,16 @@ const commonFeatureRouter=require('./routes/common/feature-routes')
 
 
 
-
+const MONGOURI='mongodb+srv://harithrar11:harithrapraisy@cluster0.xbbmcvb.mongodb.net/'
 //create a database connection -> u can also create a seperate file for this and then import/use that file here
 mongoose
-.connect('mongodb+srv://harithrar11:harithrapraisy@cluster0.xbbmcvb.mongodb.net/')
+.connect(MONGOURI)
 .then(()=>console.log('MongoDB connected'))
 .catch(error=>console.log(error));
+
+// const __dirname=path.resolve();
+
+require('dotenv').config();
 const app=express()
 const PORT=process.env.PORT||5000;
 app.use(cors({
@@ -42,13 +48,20 @@ app.use('/api/admin/products',adminProductsRouter)
 app.use('/api/admin/orders',adminOrderRouter)
 
 
-
 app.use('/api/shop/products',shopProductsRouter)
 app.use('/api/shop/cart',shopCartRouter)
 app.use('/api/shop/address',shopAddressRouter)
 app.use('/api/shop/order',shopOrderRouter)
 app.use('/api/shop/search',shopSearchRouter)
 app.use('/api/common/feature',commonFeatureRouter)
+
+const __dirnamePath = path.resolve(); // avoid naming conflict with __dirname
+app.use(express.static(path.join(__dirnamePath, '../client/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirnamePath, '../client/dist/index.html'));
+});
+
 
 
 app.listen(PORT,()=>console.log(`server is running on ${PORT}`))
